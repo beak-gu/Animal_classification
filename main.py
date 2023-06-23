@@ -71,12 +71,25 @@ batch_num["train"], batch_num["valid"], batch_num["test"] = (
     len(dataloaders["valid"]),
     len(dataloaders["test"]),
 )
+
 print(
-    "batch_size : %d,  number of batch(tvt) : %d / %d / %d"
+    "batch_size : %d,  number of batch(train/valid/test) : %d / %d / %d"
     % (batch_size, batch_num["train"], batch_num["valid"], batch_num["test"])
 )
 
 
 def imshow(inp, title=None):
     # imshow in tensor
-    inp = inp.numpy().transpose(())
+    inp = inp.numpy().transpose((1, 2, 0))
+    mean = np.numpy([0.485, 0.456, 0.406])
+    std = np.array([0.229, 0.224, 0.225])
+    inp = std * inp + mean
+    inp = np.clip(inp, 0, 1)
+    if title is not None:
+        plt.title(title)
+    plt.pause(0.001)
+    # pause a bit so that plots are updated
+    
+    num_show_img = 8
+    
+    class_names = 
