@@ -30,7 +30,7 @@ num_epochs = 25
 # batch_size가 클수록 좋기는 한데,,, 일단 컴터가 안좋으니까 64 랩실컴으로 돌릴때는 128으로 하자
 batch_size = 64
 
-data_path = r"C:\Users\ngw77\Desktop\Ncloud\Image_Training\Dataset"
+data_path = r"C:\Users\ngw77\Desktop\Ncloud\Dataset_AI"
 save_path = r"C:\Users\ngw77\Desktop\Ncloud\Image_Training\output"
 
 data_train_path = os.path.join(data_path, "train")
