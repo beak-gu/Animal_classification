@@ -42,7 +42,7 @@ transform_function = transforms.Compose(
     [
         transforms.Resize((224, 224)),  # 모델 입력사이즈로 resize
         transforms.ToTensor(),  # 0101로 바꾸기
-        # transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ]
 )
 
@@ -156,91 +156,3 @@ check_image, check_class = inputs[:num_show_img], classes[:num_show_img]
 check_image_from_tensor(check_image, check_class)
 
 ######################################################################################################################################
-model = EfficientNet()
-# CrossEntropyLoss 사용
-criterion = nn.CrossEntropyLoss()
-# backpropagation method
-learning_rate = 1e-3
-optimizer = optim.Adam(model.parameters())
-num_epochs = 10
-num_batches = len(dataloaders["train"])
-
-list_epoch = []
-list_train_loss = []
-list_val_loss = []
-list_train_acc = []
-list_val_acc = []
-train_total = 0
-val_total = 0
-train_correct = 0
-val_correct = 0
-for epoch in range(num_epochs):
-    trn_loss = 0.0
-    train_total = 0
-    # val_total= 0
-    train_correct = 0
-    # val_correct = 0
-    for i, data in enumerate(dataloaders["train"]):
-        x, labels = data
-        # grad init
-        optimizer.zero_grad()
-        # forward propagation
-        model_output = model(x)
-        # calculate acc
-        _, predicted = torch.max(model_output.data, 1)
-        train_total += labels.size(0)
-        train_correct += (predicted == labels).sum().item()
-        # calculate loss
-        loss = criterion(model_output, labels)
-        # back propagation
-        loss.backward()
-        # weight update
-        optimizer.step()
-
-        # trn_loss summary
-        trn_loss += loss.item()
-        # del (memory issue)
-        del loss
-        del model_output
-        if (i + 1) % 100 == 0:
-            print(
-                "epoch: {}/{} | batch: {} | trn loss: {:.4f} | trn acc: {:.4f}%".format(
-                    epoch + 1,
-                    num_epochs,
-                    i + 1,
-                    trn_loss / i,
-                    100 * train_correct / train_total,
-                )
-            )
-
-        # 학습과정 출력
-        if (i + 1) % 100 == 0:  # every 100 mini-batches
-            with torch.no_grad():  # very very very very important!!!
-                val_loss = 0.0
-                for j, val in enumerate(valloader):
-                    val_x, val_labels = val
-                    val_output = model(val_x)
-                    # calculate acc
-                    _, predicted = torch.max(val_output.data, 1)
-                    val_total += val_labels.size(0)
-                    val_correct += (predicted == val_labels).sum().item()
-
-                    v_loss = criterion(val_output, val_labels)
-                    val_loss += v_loss
-
-            print(
-                "epoch: {}/{} | batch: {} | trn loss: {:.4f} | trn acc: {:.4f}% | val loss: {:.4f} | val acc: {:.4f}%".format(
-                    epoch + 1,
-                    num_epochs,
-                    i + 1,
-                    trn_loss / i,
-                    100 * train_correct / train_total,
-                    val_loss / len(valloader),
-                    100 * val_correct / val_total,
-                )
-            )
-    list_epoch.append(epoch + 1)
-    list_train_loss.append(trn_loss / num_batches)
-    # list_val_loss.append(val_loss/len(valloader))
-    list_train_acc.append(100 * train_correct / train_total)
-    # list_val_acc.append(100 * val_correct / val_total)

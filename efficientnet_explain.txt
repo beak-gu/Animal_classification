@@ -1,0 +1,8 @@
+EfficientNet => State Of The Art
+모델의 정확도를 높이기 위한 방법
+- 모델의 깊이
+- 너비
+- 입력의 이미지 크기
+EfficientNet 3가지를 효율적으로 조절 할 수 있는
+Coumpound scailing 방법 제안
+깊이 너비 입력 이미지 크기가 일정한 관계가 있음
