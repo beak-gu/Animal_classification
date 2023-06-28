@@ -21,6 +21,7 @@ from torchvision import transforms, datasets
 from torch.utils.data import Subset, dataloader
 from efficientnet_pytorch import EfficientNet
 
+
 # model = EfficientNet.from_pretrained(model_name, num_classes=num_classes)
 def train_model(
     model,
@@ -72,9 +73,9 @@ def train_model(
                     # class의 수가 2이므로 2보다 크면 break
                     if batch_idx > 2:
                         break
-                    # input = [128,3,224,224]
+                    # inputs = [128,3,224,224]
                     # labels = [128], tensor[1,1,1,0,1,1, ..]
-                    input, labels = batch
+                    inputs, labels = batch
                     inputs = inputs.to(device)
                     labels = labels.to(device)
                     # optimizer : 계산된 그라디언트를 기반으로 모델의 매개변수 업데이트 하는 최적화 '함수'
@@ -83,5 +84,14 @@ def train_model(
                     optimizer.zero_grad()
                     # torch.set_grad_enabled() => pythorch 함수 코드 블럭에 대해 그라디언트를 계산 할지 말지 지정 가능
                     # with구문 : with 자원의 획득 as 자원의 반납 : 자원의 사용
-                    with torch.set_grad_enabled(phase = 'train'):
-                      
+                    with torch.set_grad_enabled(phase="train"):
+                        outputs = model(inputs)
+                        # outputs : (batch_size,num_classes)
+                        _, preds = torch.max(outputs, 1)
+                        # 예측된 출력과 실제 레이블 간의 차이점
+                        # 모델의 예측이 Ground Truth와 얼마나 잘 일치하는지
+                        loss = criterion(outputs, labels)
+                        # 학습시만 backpropagation, backward + optimize only if in training phase
+                        if phase == "train":
+                            loss.backward()
+                            optimizer.step()
