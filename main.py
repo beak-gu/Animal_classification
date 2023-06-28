@@ -21,6 +21,7 @@ from tqdm import tqdm
 from torchvision import transforms, datasets
 from torch.utils.data import Subset, dataloader
 from efficientnet_pytorch import EfficientNet
+import train
 
 
 ## parameter
