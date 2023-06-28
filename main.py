@@ -165,6 +165,7 @@ Image_size = EfficientNet.get_image_size(model_name)
 print("model input shape : (%d x %d)" % (Image_size, Image_size))
 model = EfficientNet.from_pretrained(model_name, num_classes=num_classes)
 
+# 과하게 학습하는 것을 방지 FC layer만 학습하고 efficientNet extractor 부분은 freeze하여 학습시간 단축, 89860 vs 4097408
 if freeze_extractor:
     print("extractor freeeze")
     for n, p in model.named_parameters():
@@ -172,6 +173,7 @@ if freeze_extractor:
             p.requires_grad = False
 
 
+# 파라미터의 갯수를 세는 함수
 def count_parameters(model):
     total_trainable_params = 0
     for p in model.parameters():
@@ -179,3 +181,16 @@ def count_parameters(model):
             total_trainable_params += p.numel()
 
     return total_trainable_params
+
+
+# define optimizer, criterion
+criterion = nn.CrossEntropyLoss()  # 분류이므로 cross entrophy 사용
+
+# optimizer 선언, SGD, Adam으로도 해보자
+# optimizer = optim.SGD(model.parameters(),
+#                          lr = 0.05,
+#                          momentum=0.9,
+#                          weight_decay=1e-4)
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+scheduler = optim.lr_scheduler.ExponentialLR(optimizer, 0.98739)  # LR 스케쥴러, 점점 줄어든다
