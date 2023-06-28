@@ -20,14 +20,14 @@ from sklearn.metrics import f1_score
 from tqdm import tqdm
 from torchvision import transforms, datasets
 from torch.utils.data import Subset, dataloader
-from efficient_net import *
+from efficientnet_pytorch import EfficientNet
 
 
 ## parameter
 is_Test = False
 # is_Test = True
 num_epochs = 25
-# batch_size가 클수록 좋기는 한데,,, 일단 컴터가 안좋으니까 64 랩실컴으로 돌릴때는 128으로 하자
+################## batch_size가 클수록 좋기는 한데,,, 일단 컴터가 안좋으니까 64 랩실컴으로 돌릴때는 128으로 하자
 batch_size = 64
 
 data_path = r"C:\Users\ngw77\Desktop\Ncloud\Dataset_AI"
@@ -63,7 +63,7 @@ print("////////")
 
 
 ## data loader 선언
-# gpu있을 시에는 4*gpu갯수 => num_workers=4
+#################### gpu있을 시에는 4*gpu갯수 => num_workers=4
 dataloaders, batch_num = {}, {}
 dataloaders["train"] = torch.utils.data.DataLoader(
     dataset["train"], batch_size=batch_size, shuffle=True
@@ -103,7 +103,7 @@ def imshow(inp, title=None):
 
     num_show_img = 8
 
-    class_names = {"0": "boar", "1": "elf"}
+    class_names = {"0": "Gorani", "1": "Noru"}
 
     input, classes = next(iter(dataloader["train"]))
     out = torchvision.utils.make_grid(input[:num_show_img])
@@ -155,4 +155,27 @@ print(inputs.size())
 check_image, check_class = inputs[:num_show_img], classes[:num_show_img]
 check_image_from_tensor(check_image, check_class)
 
-######################################################################################################################################
+model_name = "efficientnet-b0"  # b5
+num_classes = 2  # 노루 고라니
+freeze_extractor = True  # 과하게 학습하는 것을 방지 FC layer만 학습하고 efficientNet extractor 부분은 freeze하여 학습시간 단축, 89860 vs 4097408
+use_multi_gpu = False
+########################gpu 있는 곳에서 학습 하면 True로 바꿔주기
+
+Image_size = EfficientNet.get_image_size(model_name)
+print("model input shape : (%d x %d)" % (Image_size, Image_size))
+model = EfficientNet.from_pretrained(model_name, num_classes=num_classes)
+
+if freeze_extractor:
+    print("extractor freeeze")
+    for n, p in model.named_parameters():
+        if "_fc" not in n:
+            p.requires_grad = False
+
+
+def count_parameters(model):
+    total_trainable_params = 0
+    for p in model.parameters():
+        if p.requires_grad:
+            total_trainable_params += p.numel()
+
+    return total_trainable_params
