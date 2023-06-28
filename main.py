@@ -164,6 +164,7 @@ use_multi_gpu = False
 
 Image_size = EfficientNet.get_image_size(model_name)
 print("model input shape : (%d x %d)" % (Image_size, Image_size))
+# 사전에 훈련된 eddicientnet data를 가져와 model에 저장
 model = EfficientNet.from_pretrained(model_name, num_classes=num_classes)
 
 # 과하게 학습하는 것을 방지 FC layer만 학습하고 efficientNet extractor 부분은 freeze하여 학습시간 단축, 89860 vs 4097408
