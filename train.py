@@ -76,67 +76,63 @@ def train_model(
                         break
                     # inputs = [128,3,224,224]
                     # labels = [128], tensor[1,1,1,0,1,1, ..]
-                    inputs, labels = batch
-                    inputs = inputs.to(device)
-                    labels = labels.to(device)
-                    print(len(labels))
-                    # optimizer : 계산된 그라디언트를 기반으로 모델의 매개변수 업데이트 하는 최적화 '함수'
-                    # 기계 학습의 목표 : 모델의 예측 값 간의 불일치를 측정하는 손실 함수를 최소화 하는 것
-                    # 모델의 각 매개변수에 대해 기울기를 누적 => 기울기를 적용하여, 매개 변수를 업데이트 하기 전에 각 매개변수에 대해 기울기 0으로 설정
-                    optimizer.zero_grad()
-                    # torch.set_grad_enabled() => pythorch 함수 코드 블럭에 대해 그라디언트를 계산 할지 말지 지정 가능
-                    # with구문 : with 자원의 획득 as 자원의 반납 : 자원의 사용
-                    with torch.set_grad_enabled(phase="train"):
-                        outputs = model(inputs)
-                        # outputs : (batch_size,num_classes)
-                        _, preds = torch.max(outputs, 1)
-                        # 예측된 출력과 실제 레이블 간의 차이점
-                        # 모델의 예측이 Ground Truth와 얼마나 잘 일치하는지
-                        loss = criterion(outputs, labels)
-                        # 학습시만 backpropagation, backward + optimize only if in training phase
-                        if phase == "train":
-                            loss.backward()
-                            optimizer.step()
-                    # statistics
-                    running_loss += loss.item() * inputs.size(0)
-                    running_corrects += torch.sum(preds == labels.data)
-                    num_cnt += len(labels)
-
-                    pred_list += preds.data.cpu().numpy().tolist()
-                    label_list += labels.data.cpu().numpy().tolist()
-                if phase == "train":
-                    scheduler.step()
-
-                epoch_loss = float(running_loss / num_cnt)
-                epoch_acc = float((running_correct.double() / num_cnt).cpu * 100)
-                epoch_f1 = float(f1_score(label_list, pred_list, average="mecro") * 100)
-
-                if phase == "train":
-                    train_loss.append(epoch_loss)
-                    train_acc.append(epoch_acc)
-                    train_f1.append(epoch_f1)
-
-                else:
-                    valid_loss.append(epoch_loss)
-                    valid_acc.append(epoch_acc)
-                    valid_f1.append(epoch_f1)
-
-                print(
-                    "{} Loss : {:.2f} | Acc : {:.2f} | f1 : {:.2f}".format(
-                        phase, epoch_loss, epoch_acc, epoch_f1
-                    )
+                inputs, labels = batch
+                inputs = inputs.to(device)
+                labels = labels.to(device)
+                # optimizer : 계산된 그라디언트를 기반으로 모델의 매개변수 업데이트 하는 최적화 '함수'
+                # 기계 학습의 목표 : 모델의 예측 값 간의 불일치를 측정하는 손실 함수를 최소화 하는 것
+                # 모델의 각 매개변수에 대해 기울기를 누적 => 기울기를 적용하여, 매개 변수를 업데이트 하기 전에 각 매개변수에 대해 기울기 0으로 설정
+                optimizer.zero_grad()
+                # torch.set_grad_enabled() => pythorch 함수 코드 블럭에 대해 그라디언트를 계산 할지 말지 지정 가능
+                # with구문 : with 자원의 획득 as 자원의 반납 : 자원의 사용
+                with torch.set_grad_enabled(phase == "train"):
+                    outputs = model(inputs)
+                    # outputs : (batch_size,num_classes)
+                    _, preds = torch.max(outputs, 1)
+                    # 예측된 출력과 실제 레이블 간의 차이점
+                    # 모델의 예측이 Ground Truth와 얼마나 잘 일치하는지
+                    loss = criterion(outputs, labels)
+                    # 학습시만 backpropagation, backward + optimize only if in training phase
+                    if phase == "train":
+                        loss.backward()
+                        optimizer.step()
+                # statistics
+                running_loss += loss.item() * inputs.size(0)
+                running_correct += torch.sum(preds == labels.data)
+                num_cnt += len(labels)
+                print("///////////////////////////////////////////////////")
+                print("Num Cnt: ", num_cnt)
+                pred_list += preds.data.cpu().numpy().tolist()
+                label_list += labels.data.cpu().numpy().tolist()
+            if phase == "train":
+                scheduler.step()
+            epoch_loss = float(running_loss / num_cnt)
+            epoch_acc = float((running_correct.double() / num_cnt).cpu * 100)
+            epoch_f1 = float(f1_score(label_list, pred_list, average="mecro") * 100)
+            if phase == "train":
+                train_loss.append(epoch_loss)
+                train_acc.append(epoch_acc)
+                train_f1.append(epoch_f1)
+            else:
+                valid_loss.append(epoch_loss)
+                valid_acc.append(epoch_acc)
+                valid_f1.append(epoch_f1)
+            print(
+                "{} Loss : {:.2f} | Acc : {:.2f} | f1 : {:.2f}".format(
+                    phase, epoch_loss, epoch_acc, epoch_f1
                 )
-                # save best model, validation acc가 높을때 저장, deep copy the model
-                # if (phase == 'valid') and (epoch_acc > best_acc):
-                if (phase == "valid") and (epoch_f1 > best_f1):
-                    best_idx = epoch
-                    best_acc = epoch_acc
-                    best_f1 = epoch_f1
-                    best_model_wts = copy.deepcopy(model.state_dict())
-                    print(
-                        "==> best model saved - %d | %.2f | %.2f"
-                        % (best_idx, best_acc, best_f1)
-                    )
+            )
+            # save best model, validation acc가 높을때 저장, deep copy the model
+            # if (phase == 'valid') and (epoch_acc > best_acc):
+            if (phase == "valid") and (epoch_f1 > best_f1):
+                best_idx = epoch
+                best_acc = epoch_acc
+                best_f1 = epoch_f1
+                best_model_wts = copy.deepcopy(model.state_dict())
+                print(
+                    "==> best model saved - %d | %.2f | %.2f"
+                    % (best_idx, best_acc, best_f1)
+                )
 
         time_elapsed = time.time() - since
         print(
