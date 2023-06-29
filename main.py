@@ -29,7 +29,7 @@ is_Test = False
 # is_Test = True
 num_epochs = 25
 ################## batch_size가 클수록 좋기는 한데,,, 일단 컴터가 안좋으니까 64 랩실컴으로 돌릴때는 128으로 하자
-batch_size = 64
+batch_size = 128
 
 data_path = r"C:\Users\ngw77\Desktop\Ncloud\Dataset_AI"
 save_path = r"C:\Users\ngw77\Desktop\Ncloud\Image_Training\output"
@@ -67,13 +67,13 @@ print("////////")
 #################### gpu있을 시에는 4*gpu갯수 => num_workers=4
 dataloaders, batch_num = {}, {}
 dataloaders["train"] = torch.utils.data.DataLoader(
-    dataset["train"], batch_size=batch_size, shuffle=True
+    dataset["train"], batch_size=batch_size, shuffle=True, num_workers=4
 )
 dataloaders["valid"] = torch.utils.data.DataLoader(
-    dataset["valid"], batch_size=batch_size, shuffle=False
+    dataset["valid"], batch_size=batch_size, shuffle=False, num_workers=4
 )
 dataloaders["test"] = torch.utils.data.DataLoader(
-    dataset["test"], batch_size=batch_size, shuffle=False
+    dataset["test"], batch_size=batch_size, shuffle=False, num_workers=4
 )
 
 
