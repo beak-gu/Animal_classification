@@ -1,0 +1,28 @@
+import os
+import random
+import shutil
+
+# Set the paths for the original folder and the new folder
+original_folder_path = r"C:\Users\ngw77\Desktop\Ncloud\OGD\DATA\Validation\WCD\ch"
+new_folder_path = r"C:\Users\ngw77\Desktop\Ncloud\Dataset_AI\valid\cheang"
+
+# Get the list of photo filenames from the original folder
+photo_filenames = os.listdir(original_folder_path)
+
+# Randomly select 1000 photos
+selected_photos = random.sample(photo_filenames, 279)
+
+# Create the new folder if it doesn't exist
+if not os.path.exists(new_folder_path):
+    os.makedirs(new_folder_path)
+
+# Move the selected photos to the new folder
+for photo in selected_photos:
+    photo_path = os.path.join(original_folder_path, photo)
+    new_photo_path = os.path.join(new_folder_path, photo)
+    shutil.move(photo_path, new_photo_path)
+
+# Delete the remaining photos in the original folder
+for photo in photo_filenames:
+    photo_path = os.path.join(original_folder_path, photo)
+    os.remove(photo_path)
