@@ -33,6 +33,7 @@ def train_model(
     num_epochs=25,
     is_test=False,
     save_path="output",
+    use_multi_gpu=True,
 ):
     since = time.time()
 
@@ -95,3 +96,72 @@ def train_model(
                         if phase == "train":
                             loss.backward()
                             optimizer.step()
+
+                if phase == "train":
+                    scheduler.step()
+
+                epoch_loss = float(running_loss / num_cnt)
+                epoch_acc = float((running_correct.double() / num_cnt)).cpu * 100
+                epoch_f1 = float(f1_score(label_list, pred_list, average="mecro") * 100)
+
+                if phase == "train":
+                    train_loss.append(epoch_loss)
+                    train_acc.append(epoch_acc)
+                    train_f1.append(epoch_f1)
+
+                else:
+                    valid_loss.append(epoch_loss)
+                    valid_acc.append(epoch_acc)
+                    valid_f1.append(epoch_f1)
+
+                print(
+                    "{} Loss : {:.2f} | Acc : {:.2f} | f1 : {:.2f}".format(
+                        phase, epoch_loss, epoch_acc, epoch_f1
+                    )
+                )
+                # save best model, validation acc가 높을때 저장, deep copy the model
+                # if (phase == 'valid') and (epoch_acc > best_acc):
+                if (phase == "valid") and (epoch_f1 > best_f1):
+                    best_idx = epoch
+                    best_acc = epoch_acc
+                    best_f1 = epoch_f1
+                    best_model_wts = copy.deepcopy(model.state_dict())
+                    print(
+                        "==> best model saved - %d | %.2f | %.2f"
+                        % (best_idx, best_acc, best_f1)
+                    )
+
+        time_elapsed = time.time() - since
+        print(
+            "\n\nTraining complete in {:.0f}m {:.0f}s".format(
+                time_elapsed // 60, time_elapsed % 60
+            )
+        )
+        print("Best valid Acc: %d - %.2f | %.2f" % (best_idx, best_acc, best_f1))
+
+        # load best model weights
+        model.load_state_dict(best_model_wts)
+
+        if use_multi_gpu:
+            model_state_dict = model.module.state_dict()
+        else:
+            model_state_dict = model.state_dict()
+
+        weight_path = os.path.join(
+            save_path, "model_%d_%.2f_%.2f.pt" % (best_idx, best_acc, best_f1)
+        )
+        torch.save(model_state_dict, weight_path)
+
+        print("save model_%d_%.2f_%.2f.pt" % (best_idx, best_acc, best_f1))
+    return (
+        model,
+        best_idx,
+        best_acc,
+        train_loss,
+        train_acc,
+        train_f1,
+        valid_loss,
+        valid_acc,
+        valid_f1,
+        weight_path,
+    )
