@@ -68,17 +68,18 @@ def train_model(
             running_loss, running_correct, num_cnt = 0.0, 0, 0
             pred_list, label_list = [], []
 
-            for batch_idx, batch in enumerate(dataloaders(phase)):
+            for batch_idx, batch in enumerate(dataloaders[phase]):
                 # for test
                 if is_test:
                     # class의 수가 2이므로 2보다 크면 break
-                    if batch_idx > 2:
+                    if batch_idx > 6:
                         break
                     # inputs = [128,3,224,224]
                     # labels = [128], tensor[1,1,1,0,1,1, ..]
                     inputs, labels = batch
                     inputs = inputs.to(device)
                     labels = labels.to(device)
+                    print(len(labels))
                     # optimizer : 계산된 그라디언트를 기반으로 모델의 매개변수 업데이트 하는 최적화 '함수'
                     # 기계 학습의 목표 : 모델의 예측 값 간의 불일치를 측정하는 손실 함수를 최소화 하는 것
                     # 모델의 각 매개변수에 대해 기울기를 누적 => 기울기를 적용하여, 매개 변수를 업데이트 하기 전에 각 매개변수에 대해 기울기 0으로 설정
@@ -96,12 +97,18 @@ def train_model(
                         if phase == "train":
                             loss.backward()
                             optimizer.step()
+                    # statistics
+                    running_loss += loss.item() * inputs.size(0)
+                    running_corrects += torch.sum(preds == labels.data)
+                    num_cnt += len(labels)
 
+                    pred_list += preds.data.cpu().numpy().tolist()
+                    label_list += labels.data.cpu().numpy().tolist()
                 if phase == "train":
                     scheduler.step()
 
                 epoch_loss = float(running_loss / num_cnt)
-                epoch_acc = float((running_correct.double() / num_cnt)).cpu * 100
+                epoch_acc = float((running_correct.double() / num_cnt).cpu * 100)
                 epoch_f1 = float(f1_score(label_list, pred_list, average="mecro") * 100)
 
                 if phase == "train":

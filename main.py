@@ -29,7 +29,7 @@ is_Test = False
 # is_Test = True
 num_epochs = 25
 ################## batch_size가 클수록 좋기는 한데,,, 일단 컴터가 안좋으니까 64 랩실컴으로 돌릴때는 128으로 하자
-batch_size = 128
+batch_size = 20
 
 data_path = r"C:\Users\ngw77\Desktop\Ncloud\Dataset_AI"
 save_path = r"C:\Users\ngw77\Desktop\Ncloud\Image_Training\output"
@@ -67,13 +67,13 @@ print("////////")
 #################### gpu있을 시에는 4*gpu갯수 => num_workers=4
 dataloaders, batch_num = {}, {}
 dataloaders["train"] = torch.utils.data.DataLoader(
-    dataset["train"], batch_size=batch_size, shuffle=True, num_workers=4
+    dataset["train"], batch_size=batch_size, shuffle=True
 )
 dataloaders["valid"] = torch.utils.data.DataLoader(
-    dataset["valid"], batch_size=batch_size, shuffle=False, num_workers=4
+    dataset["valid"], batch_size=batch_size, shuffle=False
 )
 dataloaders["test"] = torch.utils.data.DataLoader(
-    dataset["test"], batch_size=batch_size, shuffle=False, num_workers=4
+    dataset["test"], batch_size=batch_size, shuffle=False
 )
 
 
@@ -113,15 +113,15 @@ def imshow(inp, title=None):
         "5": "rabbit",
     }
 
-    input, classes = next(iter(dataloader["train"]))
+    input, classes = next(iter(dataloaders["train"]))
     out = torchvision.utils.make_grid(input[:num_show_img])
     imshow(out, title=[class_names[str(int(x))] for x in classes[:num_show_img]])
 
-    input, classes = next(iter(dataloader["valid"]))
+    input, classes = next(iter(dataloaders["valid"]))
     out = torchvision.utils.make_grid(input[:num_show_img])
     imshow(out, title=[class_names[str(int(x))] for x in classes[:num_show_img]])
 
-    input, classes = next(iter(dataloader["test"]))
+    input, classes = next(iter(dataloaders["test"]))
     out = torchvision.utils.make_grid(input[:num_show_img])
     imshow(out, title=[class_names[str(int(x))] for x in classes[:num_show_img]])
 
@@ -157,6 +157,7 @@ def check_image_from_tensor(check_image, check_class):
 
 num_show_img = 10
 # data check
+# print(dataloaders["train"])
 inputs, classes = next(iter(dataloaders["train"]))
 print(inputs.size())
 ############# inputs의 사이즈 : torch.Size([128, 3, 224, 224]) #####################
@@ -166,7 +167,7 @@ check_image_from_tensor(check_image, check_class)
 model_name = "efficientnet-b0"  # b5
 num_classes = 6  # 0_반달가슴곰, 1_청설모, 2_다람쥐, 3_고라니, 4_멧돼지, 5_멧토끼
 freeze_extractor = True  # 과하게 학습하는 것을 방지 FC layer만 학습하고 efficientNet extractor 부분은 freeze하여 학습시간 단축, 89860 vs 4097408
-use_multi_gpu = True
+use_multi_gpu = False
 ########################gpu 있는 곳에서 학습 하면 True로 바꿔주기
 
 Image_size = EfficientNet.get_image_size(model_name)
@@ -212,8 +213,10 @@ criterion = nn.CrossEntropyLoss()  # 분류이므로 cross entrophy 사용
 #                          momentum=0.9,
 #                          weight_decay=1e-4)
 optimizer = optim.Adam(model.parameters(), lr=0.001)
-
+# print(dataloaders["train"]) _ 가능
 scheduler = optim.lr_scheduler.ExponentialLR(optimizer, 0.98739)  # LR 스케쥴러, 점점 줄어든다
+# print(dataloaders["train"]) _ 가능
+
 
 # train!!
 (
@@ -268,96 +271,3 @@ ax2.tick_params("y", colors="k")
 
 fig.tight_layout()
 plt.show()
-
-# weights_path = 'output/model_2_100.00_100.00.pt'
-
-
-# get_test_metric
-def get_test_metric(model, phase="test", num_images=4, device="cuda", is_Test=False):
-    ## 데이타 체크
-    def imshow(inp, title=None):
-        """Imshow for Tensor."""
-        inp = inp.numpy().transpose((1, 2, 0))
-        mean = np.array([0.485, 0.456, 0.406])
-        std = np.array([0.229, 0.224, 0.225])
-        inp = std * inp + mean
-        inp = np.clip(inp, 0, 1)
-        plt.imshow(inp)
-        if title is not None:
-            plt.title(title)
-        plt.pause(0.001)  # pause a bit so that plots are updated
-
-    class_names = ["anomal", "normal"]
-    was_training = model.training
-    model.eval()
-
-    running_loss, running_corrects, num_cnt = 0.0, 0, 0
-    pred_list, label_list = [], []
-
-    dataloader = dataloaders[phase]
-    allFiles, _ = map(list, zip(*dataloader.dataset.samples))
-
-    with torch.no_grad():
-        for idx, (inputs, labels) in enumerate(dataloaders[phase]):
-            if is_Test:
-                if idx > 2:
-                    break
-
-            inputs = inputs.to(device)
-            labels = labels.to(device)
-
-            outputs = model(inputs)
-            _, preds = torch.max(outputs, 1)
-            loss = criterion(outputs, labels)  # batch의 평균 loss 출력
-
-            running_loss += loss.item() * inputs.size(0)
-            running_corrects += torch.sum(preds == labels.data)
-            num_cnt += inputs.size(0)  # batch size
-
-            pred_list += preds.data.cpu().numpy().tolist()
-            label_list += labels.data.cpu().numpy().tolist()
-
-        test_loss = running_loss / num_cnt
-        test_acc = running_corrects.double() / num_cnt
-        test_f1 = float(f1_score(label_list, pred_list, average="macro"))  # micro
-        print(
-            "test done : loss|acc|f1 : %.3f | %.2f | %.2f "
-            % (test_loss, test_acc * 100, test_f1 * 100)
-        )
-
-    ## 예시 그림 plot
-    with torch.no_grad():
-        for i, (inputs, labels) in enumerate(dataloaders[phase]):
-            inputs = inputs.to(device)
-            labels = labels.to(device)
-
-            outputs = model(inputs)
-            _, preds = torch.max(outputs, 1)
-
-            # 예시 그림 plot
-            for j in range(1, num_images + 1):
-                ax = plt.subplot(num_images // 2, 2, j)
-                ax.axis("off")
-                ax.set_title(
-                    "%s : %s -> %s"
-                    % (
-                        "True"
-                        if class_names[int(labels[j].cpu().numpy())]
-                        == class_names[int(preds[j].cpu().numpy())]
-                        else "False!!!",
-                        class_names[int(labels[j].cpu().numpy())],
-                        class_names[int(preds[j].cpu().numpy())],
-                    )
-                )
-                imshow(inputs.cpu().data[j])
-                print(allFiles[i * batch_size + j - 1])
-            if i == 0:
-                break
-
-    return label_list, pred_list
-
-
-## TEST!
-label_list, outputs_list = get_test_metric(
-    model=model_load, num_images=4, device=device
-)
