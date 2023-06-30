@@ -100,8 +100,6 @@ def train_model(
                 running_loss += loss.item() * inputs.size(0)
                 running_correct += torch.sum(preds == labels.data)
                 num_cnt += len(labels)
-                print("///////////////////////////////////////////////////")
-                print("Num Cnt: ", num_cnt)
                 pred_list += preds.data.cpu().numpy().tolist()
                 label_list += labels.data.cpu().numpy().tolist()
             if phase == "train":
