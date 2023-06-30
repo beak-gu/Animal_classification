@@ -29,10 +29,10 @@ is_Test = False
 # is_Test = True
 num_epochs = 25
 ################## batch_size가 클수록 좋기는 한데,,, 일단 컴터가 안좋으니까 64 랩실컴으로 돌릴때는 128으로 하자
-batch_size = 20
+batch_size = 128
 
-data_path = r"C:\Users\ngw77\Desktop\Ncloud\Dataset_AI"
-save_path = r"C:\Users\ngw77\Desktop\Ncloud\Image_Training\output"
+data_path = r"~/Animal_dataset"
+save_path = r"~/Image_Training-1/output"
 
 data_train_path = os.path.join(data_path, "train")
 data_valid_path = os.path.join(data_path, "valid")
@@ -67,13 +67,13 @@ print("////////")
 #################### gpu있을 시에는 4*gpu갯수 => num_workers=4
 dataloaders, batch_num = {}, {}
 dataloaders["train"] = torch.utils.data.DataLoader(
-    dataset["train"], batch_size=batch_size, shuffle=True
+    dataset["train"], batch_size=batch_size, shuffle=True,num_workers=4
 )
 dataloaders["valid"] = torch.utils.data.DataLoader(
-    dataset["valid"], batch_size=batch_size, shuffle=False
+    dataset["valid"], batch_size=batch_size, shuffle=False,num_workers=4
 )
 dataloaders["test"] = torch.utils.data.DataLoader(
-    dataset["test"], batch_size=batch_size, shuffle=False
+    dataset["test"], batch_size=batch_size, shuffle=False,num_workers=4
 )
 
 
@@ -167,7 +167,7 @@ check_image_from_tensor(check_image, check_class)
 model_name = "efficientnet-b0"  # b5
 num_classes = 6  # 0_반달가슴곰, 1_청설모, 2_다람쥐, 3_고라니, 4_멧돼지, 5_멧토끼
 freeze_extractor = True  # 과하게 학습하는 것을 방지 FC layer만 학습하고 efficientNet extractor 부분은 freeze하여 학습시간 단축, 89860 vs 4097408
-use_multi_gpu = False
+use_multi_gpu = True
 ########################gpu 있는 곳에서 학습 하면 True로 바꿔주기
 
 Image_size = EfficientNet.get_image_size(model_name)

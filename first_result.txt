@@ -1,0 +1,21 @@
+Dataset ImageFolder
+    Number of datapoints: 141872
+    Root location: /home/user/Animal_dataset/train
+    StandardTransform
+Transform: Compose(
+               Resize(size=(224, 224), interpolation=bilinear, max_size=None, antialias=None)
+               ToTensor()
+               Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+           )
+////////
+data proportion(train:valid:test) = 141872 : 17730 : 17729
+////////
+batch_size : 128,  number of batch(train/valid/test) : 1109 / 139 / 139
+////////
+torch.Size([128, 3, 224, 224])
+model input shape : (224 x 224)
+Loaded pretrained weights for efficientnet-b0
+extractor freeeze
+
+ Epoch : 0/24
+------------------------------

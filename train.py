@@ -105,8 +105,8 @@ def train_model(
             if phase == "train":
                 scheduler.step()
             epoch_loss = float(running_loss / num_cnt)
-            epoch_acc = float((running_correct.double() / num_cnt).cpu * 100)
-            epoch_f1 = float(f1_score(label_list, pred_list, average="mecro") * 100)
+            epoch_acc = float((running_correct.double() / num_cnt).cpu() * 100)
+            epoch_f1 = float(f1_score(label_list, pred_list, average="macro") * 100)
             if phase == "train":
                 train_loss.append(epoch_loss)
                 train_acc.append(epoch_acc)
