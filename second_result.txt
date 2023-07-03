@@ -1,0 +1,151 @@
+Dataset ImageFolder
+    Number of datapoints: 141872
+    Root location: /home/user/Animal_dataset/train
+    StandardTransform
+Transform: Compose(
+               Resize(size=(224, 224), interpolation=bilinear, max_size=None, antialias=None)
+               ToTensor()
+               Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+           )
+////////
+data proportion(train:valid:test) = 141872 : 17730 : 17729
+////////
+batch_size : 128,  number of batch(train/valid/test) : 1109 / 139 / 139
+////////
+torch.Size([128, 3, 224, 224])
+model input shape : (224 x 224)
+Loaded pretrained weights for efficientnet-b0
+extractor freeeze
+
+ Epoch : 0/24
+------------------------------
+train Loss : 0.18 | Acc : 95.71 | f1 : 95.77
+valid Loss : 0.05 | Acc : 98.66 | f1 : 98.73
+==> best model saved - 0 | 98.66 | 98.73
+
+
+Training complete in 16m 48s
+Best valid Acc: 0 - 98.66 | 98.73
+save model_0_98.66_98.73.pt
+
+ Epoch : 1/24
+------------------------------
+train Loss : 0.07 | Acc : 98.20 | f1 : 98.27
+valid Loss : 0.03 | Acc : 99.16 | f1 : 99.21
+==> best model saved - 1 | 99.16 | 99.21
+
+
+Training complete in 33m 40s
+Best valid Acc: 1 - 99.16 | 99.21
+save model_1_99.16_99.21.pt
+
+ Epoch : 2/24
+------------------------------
+train Loss : 0.05 | Acc : 98.45 | f1 : 98.51
+valid Loss : 0.02 | Acc : 99.40 | f1 : 99.44
+==> best model saved - 2 | 99.40 | 99.44
+
+
+Training complete in 50m 23s
+Best valid Acc: 2 - 99.40 | 99.44
+save model_2_99.40_99.44.pt
+
+ Epoch : 3/24
+------------------------------
+train Loss : 0.05 | Acc : 98.55 | f1 : 98.61
+valid Loss : 0.02 | Acc : 99.50 | f1 : 99.53
+==> best model saved - 3 | 99.50 | 99.53
+
+
+Training complete in 67m 18s
+Best valid Acc: 3 - 99.50 | 99.53
+save model_3_99.50_99.53.pt
+
+ Epoch : 4/24
+------------------------------
+train Loss : 0.04 | Acc : 98.67 | f1 : 98.74
+valid Loss : 0.02 | Acc : 99.51 | f1 : 99.54
+==> best model saved - 4 | 99.51 | 99.54
+
+
+Training complete in 84m 8s
+Best valid Acc: 4 - 99.51 | 99.54
+save model_4_99.51_99.54.pt
+
+ Epoch : 5/24
+------------------------------
+train Loss : 0.04 | Acc : 98.73 | f1 : 98.78
+valid Loss : 0.02 | Acc : 99.57 | f1 : 99.60
+==> best model saved - 5 | 99.57 | 99.60
+
+
+Training complete in 100m 31s
+Best valid Acc: 5 - 99.57 | 99.60
+save model_5_99.57_99.60.pt
+
+ Epoch : 6/24
+------------------------------
+train Loss : 0.04 | Acc : 98.74 | f1 : 98.80
+valid Loss : 0.01 | Acc : 99.60 | f1 : 99.63
+==> best model saved - 6 | 99.60 | 99.63
+
+
+Training complete in 116m 54s
+Best valid Acc: 6 - 99.60 | 99.63
+save model_6_99.60_99.63.pt
+
+ Epoch : 7/24
+------------------------------
+train Loss : 0.04 | Acc : 98.82 | f1 : 98.87
+valid Loss : 0.01 | Acc : 99.59 | f1 : 99.62
+
+
+Training complete in 133m 26s
+Best valid Acc: 6 - 99.60 | 99.63
+save model_6_99.60_99.63.pt
+
+ Epoch : 8/24
+------------------------------
+train Loss : 0.04 | Acc : 98.78 | f1 : 98.84
+valid Loss : 0.01 | Acc : 99.62 | f1 : 99.65
+==> best model saved - 8 | 99.62 | 99.65
+
+
+Training complete in 150m 12s
+Best valid Acc: 8 - 99.62 | 99.65
+save model_8_99.62_99.65.pt
+
+ Epoch : 9/24
+------------------------------
+train Loss : 0.04 | Acc : 98.74 | f1 : 98.81
+valid Loss : 0.01 | Acc : 99.61 | f1 : 99.65
+==> best model saved - 9 | 99.61 | 99.65
+
+
+Training complete in 166m 47s
+Best valid Acc: 9 - 99.61 | 99.65
+save model_9_99.61_99.65.pt
+
+ Epoch : 10/24
+------------------------------
+train Loss : 0.04 | Acc : 98.75 | f1 : 98.81
+valid Loss : 0.01 | Acc : 99.66 | f1 : 99.69
+==> best model saved - 10 | 99.66 | 99.69
+
+
+Training complete in 183m 33s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 11/24
+------------------------------
+train Loss : 0.04 | Acc : 98.83 | f1 : 98.89
+valid Loss : 0.01 | Acc : 99.63 | f1 : 99.67
+
+
+Training complete in 199m 51s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 12/24
+------------------------------

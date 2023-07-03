@@ -144,7 +144,7 @@ def train_model(
         model.load_state_dict(best_model_wts)
 
         if use_multi_gpu:
-            model_state_dict = model.module.state_dict()
+            model_state_dict = model.state_dict()
         else:
             model_state_dict = model.state_dict()
 

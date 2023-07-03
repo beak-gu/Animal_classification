@@ -19,3 +19,262 @@ extractor freeeze
 
  Epoch : 0/24
 ------------------------------
+train Loss : 0.17 | Acc : 95.87 | f1 : 95.93
+valid Loss : 0.05 | Acc : 98.71 | f1 : 98.78
+==> best model saved - 0 | 98.71 | 98.78
+
+
+Training complete in 17m 10s
+Best valid Acc: 0 - 98.71 | 98.78
+save model_0_98.71_98.78.pt
+
+ Epoch : 1/24
+------------------------------
+train Loss : 0.07 | Acc : 98.19 | f1 : 98.26
+valid Loss : 0.03 | Acc : 99.17 | f1 : 99.22
+==> best model saved - 1 | 99.17 | 99.22
+
+
+Training complete in 34m 5s
+Best valid Acc: 1 - 99.17 | 99.22
+save model_1_99.17_99.22.pt
+
+ Epoch : 2/24
+------------------------------
+train Loss : 0.05 | Acc : 98.44 | f1 : 98.51
+valid Loss : 0.02 | Acc : 99.33 | f1 : 99.37
+==> best model saved - 2 | 99.33 | 99.37
+
+
+Training complete in 50m 57s
+Best valid Acc: 2 - 99.33 | 99.37
+save model_2_99.33_99.37.pt
+
+ Epoch : 3/24
+------------------------------
+train Loss : 0.05 | Acc : 98.64 | f1 : 98.70
+valid Loss : 0.02 | Acc : 99.45 | f1 : 99.49
+==> best model saved - 3 | 99.45 | 99.49
+
+
+Training complete in 67m 45s
+Best valid Acc: 3 - 99.45 | 99.49
+save model_3_99.45_99.49.pt
+
+ Epoch : 4/24
+------------------------------
+train Loss : 0.04 | Acc : 98.66 | f1 : 98.72
+valid Loss : 0.02 | Acc : 99.51 | f1 : 99.54
+==> best model saved - 4 | 99.51 | 99.54
+
+
+Training complete in 84m 30s
+Best valid Acc: 4 - 99.51 | 99.54
+save model_4_99.51_99.54.pt
+
+ Epoch : 5/24
+------------------------------
+train Loss : 0.04 | Acc : 98.74 | f1 : 98.80
+valid Loss : 0.02 | Acc : 99.45 | f1 : 99.49
+
+
+Training complete in 101m 19s
+Best valid Acc: 4 - 99.51 | 99.54
+save model_4_99.51_99.54.pt
+
+ Epoch : 6/24
+------------------------------
+train Loss : 0.04 | Acc : 98.70 | f1 : 98.76
+valid Loss : 0.02 | Acc : 99.55 | f1 : 99.58
+==> best model saved - 6 | 99.55 | 99.58
+
+
+Training complete in 117m 31s
+Best valid Acc: 6 - 99.55 | 99.58
+save model_6_99.55_99.58.pt
+
+ Epoch : 7/24
+------------------------------
+train Loss : 0.04 | Acc : 98.75 | f1 : 98.81
+valid Loss : 0.01 | Acc : 99.61 | f1 : 99.63
+==> best model saved - 7 | 99.61 | 99.63
+
+
+Training complete in 134m 7s
+Best valid Acc: 7 - 99.61 | 99.63
+save model_7_99.61_99.63.pt
+
+ Epoch : 8/24
+------------------------------
+train Loss : 0.04 | Acc : 98.73 | f1 : 98.79
+valid Loss : 0.01 | Acc : 99.61 | f1 : 99.64
+==> best model saved - 8 | 99.61 | 99.64
+
+
+Training complete in 150m 57s
+Best valid Acc: 8 - 99.61 | 99.64
+save model_8_99.61_99.64.pt
+
+ Epoch : 9/24
+------------------------------
+train Loss : 0.04 | Acc : 98.81 | f1 : 98.86
+valid Loss : 0.01 | Acc : 99.60 | f1 : 99.63
+
+
+Training complete in 167m 50s
+Best valid Acc: 8 - 99.61 | 99.64
+save model_8_99.61_99.64.pt
+
+ Epoch : 10/24
+------------------------------
+train Loss : 0.04 | Acc : 98.79 | f1 : 98.85
+valid Loss : 0.01 | Acc : 99.66 | f1 : 99.69
+==> best model saved - 10 | 99.66 | 99.69
+
+
+Training complete in 184m 38s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 11/24
+------------------------------
+train Loss : 0.04 | Acc : 98.81 | f1 : 98.87
+valid Loss : 0.01 | Acc : 99.62 | f1 : 99.65
+
+
+Training complete in 201m 13s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 12/24
+------------------------------
+train Loss : 0.04 | Acc : 98.79 | f1 : 98.85
+valid Loss : 0.01 | Acc : 99.64 | f1 : 99.67
+
+
+Training complete in 217m 60s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 13/24
+------------------------------
+train Loss : 0.04 | Acc : 98.80 | f1 : 98.86
+valid Loss : 0.01 | Acc : 99.63 | f1 : 99.66
+
+
+Training complete in 234m 42s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 14/24
+------------------------------
+train Loss : 0.04 | Acc : 98.81 | f1 : 98.87
+valid Loss : 0.01 | Acc : 99.61 | f1 : 99.64
+
+
+Training complete in 251m 31s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 15/24
+------------------------------
+train Loss : 0.04 | Acc : 98.80 | f1 : 98.85
+valid Loss : 0.01 | Acc : 99.66 | f1 : 99.68
+
+
+Training complete in 268m 19s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 16/24
+------------------------------
+train Loss : 0.04 | Acc : 98.78 | f1 : 98.84
+valid Loss : 0.01 | Acc : 99.61 | f1 : 99.64
+
+
+Training complete in 285m 7s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 17/24
+------------------------------
+train Loss : 0.04 | Acc : 98.79 | f1 : 98.85
+valid Loss : 0.01 | Acc : 99.66 | f1 : 99.68
+
+
+Training complete in 301m 49s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 18/24
+------------------------------
+train Loss : 0.04 | Acc : 98.82 | f1 : 98.88
+valid Loss : 0.01 | Acc : 99.60 | f1 : 99.63
+
+
+Training complete in 318m 17s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 19/24
+------------------------------
+train Loss : 0.04 | Acc : 98.81 | f1 : 98.87
+valid Loss : 0.01 | Acc : 99.64 | f1 : 99.67
+
+
+Training complete in 334m 41s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 20/24
+------------------------------
+train Loss : 0.04 | Acc : 98.79 | f1 : 98.85
+valid Loss : 0.01 | Acc : 99.61 | f1 : 99.64
+
+
+Training complete in 351m 26s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 21/24
+------------------------------
+train Loss : 0.04 | Acc : 98.82 | f1 : 98.88
+valid Loss : 0.01 | Acc : 99.65 | f1 : 99.67
+
+
+Training complete in 367m 52s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 22/24
+------------------------------
+train Loss : 0.04 | Acc : 98.78 | f1 : 98.84
+valid Loss : 0.01 | Acc : 99.63 | f1 : 99.66
+
+
+Training complete in 384m 41s
+Best valid Acc: 10 - 99.66 | 99.69
+save model_10_99.66_99.69.pt
+
+ Epoch : 23/24
+------------------------------
+train Loss : 0.04 | Acc : 98.81 | f1 : 98.87
+valid Loss : 0.01 | Acc : 99.67 | f1 : 99.70
+==> best model saved - 23 | 99.67 | 99.70
+
+
+Training complete in 401m 20s
+Best valid Acc: 23 - 99.67 | 99.70
+save model_23_99.67_99.70.pt
+
+ Epoch : 24/24
+------------------------------
+train Loss : 0.04 | Acc : 98.81 | f1 : 98.86
+valid Loss : 0.01 | Acc : 99.62 | f1 : 99.65
+
+
+Training complete in 417m 58s
+Best valid Acc: 23 - 99.67 | 99.70
+save model_23_99.67_99.70.pt
+best model : 23 - 100 / 0.0
+Best model valid Acc: 23 - 99.67 | 99.70 | 0.01
