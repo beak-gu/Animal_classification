@@ -42,7 +42,8 @@ data_test_path = os.path.join(data_path, "test")
 # 이미지 tensor형태로 변환
 transform_function = transforms.Compose(
     [
-        transforms.Resize((224, 224)),  # 모델 입력사이즈로 resize
+        # transforms.Resize((224, 224)),  # 모델 입력사이즈로 resize => b0
+        transforms.Resize((456, 456)),  # 모델 입력사이즈로 resize => b5
         transforms.ToTensor(),  # 0101로 바꾸기
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ]
@@ -165,7 +166,7 @@ print(inputs.size())
 check_image, check_class = inputs[:num_show_img], classes[:num_show_img]
 check_image_from_tensor(check_image, check_class)
 
-model_name = "efficientnet-b0"  # b5
+model_name = "efficientnet-b5"  # b0
 num_classes = 6  # 0_반달가슴곰, 1_청설모, 2_다람쥐, 3_고라니, 4_멧돼지, 5_멧토끼
 freeze_extractor = True  # 과하게 학습하는 것을 방지 FC layer만 학습하고 efficientNet extractor 부분은 freeze하여 학습시간 단축, 89860 vs 4097408
 use_multi_gpu = True
