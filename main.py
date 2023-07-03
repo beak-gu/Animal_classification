@@ -22,7 +22,7 @@ from torchvision import transforms, datasets
 from torch.utils.data import Subset, dataloader
 from efficientnet_pytorch import EfficientNet
 from train import train_model
-
+from test import *
 
 ## parameter
 is_Test = False
@@ -33,6 +33,7 @@ batch_size = 128
 
 data_path = r"~/Animal_dataset"
 save_path = r"~/Image_Training-1/output"
+weights_path = r"output/model_2_100.00_100.00.pt"
 
 data_train_path = os.path.join(data_path, "train")
 data_valid_path = os.path.join(data_path, "valid")
@@ -41,7 +42,8 @@ data_test_path = os.path.join(data_path, "test")
 # 이미지 tensor형태로 변환
 transform_function = transforms.Compose(
     [
-        transforms.Resize((224, 224)),  # 모델 입력사이즈로 resize
+        # transforms.Resize((224, 224)),  # 모델 입력사이즈로 resize => b0
+        transforms.Resize((456, 456)),  # 모델 입력사이즈로 resize => b5
         transforms.ToTensor(),  # 0101로 바꾸기
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ]
@@ -67,13 +69,13 @@ print("////////")
 #################### gpu있을 시에는 4*gpu갯수 => num_workers=4
 dataloaders, batch_num = {}, {}
 dataloaders["train"] = torch.utils.data.DataLoader(
-    dataset["train"], batch_size=batch_size, shuffle=True,num_workers=4
+    dataset["train"], batch_size=batch_size, shuffle=True, num_workers=4
 )
 dataloaders["valid"] = torch.utils.data.DataLoader(
-    dataset["valid"], batch_size=batch_size, shuffle=False,num_workers=4
+    dataset["valid"], batch_size=batch_size, shuffle=False, num_workers=4
 )
 dataloaders["test"] = torch.utils.data.DataLoader(
-    dataset["test"], batch_size=batch_size, shuffle=False,num_workers=4
+    dataset["test"], batch_size=batch_size, shuffle=False, num_workers=4
 )
 
 
@@ -164,7 +166,7 @@ print(inputs.size())
 check_image, check_class = inputs[:num_show_img], classes[:num_show_img]
 check_image_from_tensor(check_image, check_class)
 
-model_name = "efficientnet-b0"  # b5
+model_name = "efficientnet-b5"  # b0
 num_classes = 6  # 0_반달가슴곰, 1_청설모, 2_다람쥐, 3_고라니, 4_멧돼지, 5_멧토끼
 freeze_extractor = True  # 과하게 학습하는 것을 방지 FC layer만 학습하고 efficientNet extractor 부분은 freeze하여 학습시간 단축, 89860 vs 4097408
 use_multi_gpu = True
@@ -271,3 +273,13 @@ ax2.tick_params("y", colors="k")
 
 fig.tight_layout()
 plt.show()
+
+model_load, criterion, device = model_load_def(weights_path)
+label_list, pred_list = model_test(
+    model=model_load,
+    dataloader=dataloaders["test"],
+    device=device,
+    criterion=criterion,
+)
+for i in range(1, 10 + 1):
+    print(label_list, pred_list)
