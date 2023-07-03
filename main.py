@@ -22,7 +22,7 @@ from torchvision import transforms, datasets
 from torch.utils.data import Subset, dataloader
 from efficientnet_pytorch import EfficientNet
 from train import train_model
-
+from test import *
 
 ## parameter
 is_Test = False
@@ -33,6 +33,7 @@ batch_size = 128
 
 data_path = r"~/Animal_dataset"
 save_path = r"~/Image_Training-1/output"
+weights_path = r"output/model_2_100.00_100.00.pt"
 
 data_train_path = os.path.join(data_path, "train")
 data_valid_path = os.path.join(data_path, "valid")
@@ -67,13 +68,13 @@ print("////////")
 #################### gpu있을 시에는 4*gpu갯수 => num_workers=4
 dataloaders, batch_num = {}, {}
 dataloaders["train"] = torch.utils.data.DataLoader(
-    dataset["train"], batch_size=batch_size, shuffle=True,num_workers=4
+    dataset["train"], batch_size=batch_size, shuffle=True, num_workers=4
 )
 dataloaders["valid"] = torch.utils.data.DataLoader(
-    dataset["valid"], batch_size=batch_size, shuffle=False,num_workers=4
+    dataset["valid"], batch_size=batch_size, shuffle=False, num_workers=4
 )
 dataloaders["test"] = torch.utils.data.DataLoader(
-    dataset["test"], batch_size=batch_size, shuffle=False,num_workers=4
+    dataset["test"], batch_size=batch_size, shuffle=False, num_workers=4
 )
 
 
@@ -271,3 +272,13 @@ ax2.tick_params("y", colors="k")
 
 fig.tight_layout()
 plt.show()
+
+model_load, criterion, device = model_load_def(weights_path)
+label_list, pred_list = model_test(
+    model=model_load,
+    dataloader=dataloaders["test"],
+    device=device,
+    criterion=criterion,
+)
+for i in range(1, 10 + 1):
+    print(label_list, pred_list)

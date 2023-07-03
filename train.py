@@ -122,15 +122,16 @@ def train_model(
             )
             # save best model, validation acc가 높을때 저장, deep copy the model
             # if (phase == 'valid') and (epoch_acc > best_acc):
-            if (phase == "valid") and (epoch_f1 > best_f1):
-                best_idx = epoch
-                best_acc = epoch_acc
-                best_f1 = epoch_f1
-                best_model_wts = copy.deepcopy(model.state_dict())
-                print(
-                    "==> best model saved - %d | %.2f | %.2f"
-                    % (best_idx, best_acc, best_f1)
-                )
+            if phase == "valid":
+                if epoch_f1 > best_f1:
+                    best_idx = epoch
+                    best_acc = epoch_acc
+                    best_f1 = epoch_f1
+                    best_model_wts = copy.deepcopy(model.state_dict())
+                    print(
+                        "==> best model saved - %d | %.2f | %.2f"
+                        % (best_idx, best_acc, best_f1)
+                    )
 
         time_elapsed = time.time() - since
         print(
