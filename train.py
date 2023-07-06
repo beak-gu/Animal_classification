@@ -91,6 +91,7 @@ def train_model(
                     _, preds = torch.max(outputs, 1)
                     # 예측된 출력과 실제 레이블 간의 차이점
                     # 모델의 예측이 Ground Truth와 얼마나 잘 일치하는지
+                    print(outputs.shape, labels.shape)
                     loss = criterion(outputs, labels)
                     # 학습시만 backpropagation, backward + optimize only if in training phase
                     if phase == "train":
