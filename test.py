@@ -1,4 +1,4 @@
-# weights_path = 'output/model_2_100.00_100.00.pt'
+# weights_path = 'output/model_23_99.67_99.70.pt'
 ## load library
 import numpy as np
 import json
@@ -72,21 +72,61 @@ def model_test(model, dataloader, device, criterion):
         inputs, labels = batch
         inputs = inputs.to(device)
         labels = labels.to(device)
-        with torch.set_grad_enabled():
-            outputs = model(inputs)
-            _, preds = torch.max(outputs, 1)
-            loss = criterion(outputs, labels)
-            running_loss += loss.item() * inputs.size(0)
-            running_correct += torch.sum(preds == labels.data)
-            num_cnt += len(labels)
-            pred_list += preds.data.cpu().numpy().tolist()
-            label_list += labels.data.cpu().numpy().tolist()
-            epoch_loss = float(running_loss / num_cnt)
-            epoch_acc = float((running_correct.double() / num_cnt).cpu() * 100)
-            epoch_f1 = float(f1_score(label_list, pred_list, average="macro") * 100)
-            print(
-                "{} Loss : {:.2f} | Acc : {:.2f} | f1 : {:.2f}".format(
-                    epoch_loss, epoch_acc, epoch_f1
-                )
+        with torch.set_grad_enabled(False):
+            for inputs, labels in dataloader:
+                inputs = inputs.to(device)
+                labels = labels.to(device)
+                outputs = model(inputs)
+                probabilities = torch.softmax(outputs, dim=1)
+                # torch.Size([128, 6]) => batch_size,class => 해당클래스가 나올확률 => 합=1  torch.Size([6])
+                print(int(torch.max(probabilities[0]) * 100))
+                _, preds = torch.max(outputs, 1)
+                loss = criterion(outputs, labels)
+                _, preds = torch.max(outputs, 1)
+                loss = criterion(outputs, labels)
+                running_loss += loss.item() * inputs.size(0)
+                running_correct += torch.sum(preds == labels.data)
+                num_cnt += len(labels)
+                pred_list += preds.data.cpu().numpy().tolist()
+                label_list += labels.data.cpu().numpy().tolist()
+                epoch_loss = float(running_loss / num_cnt)
+                epoch_acc = float((running_correct.double() / num_cnt).cpu() * 100)
+                epoch_f1 = float(f1_score(label_list, pred_list, average="macro") * 100)
+        print("pred:", preds.cpu().numpy())
+        print("label:", labels.cpu().numpy())
+        print(
+            "Loss: {:.2f} | Acc: {:.2f} | F1: {:.2f}".format(
+                epoch_loss, epoch_acc, epoch_f1
             )
+        )
     return label_list, pred_list
+
+
+if __name__ == "__main__":
+    weights_path = (
+        r"C:\Users\ngw77\Desktop\Ncloud\Image_Training\output\model_23_99.67_99.70.pt"
+    )
+    data_path = r"C:\Users\ngw77\Desktop\Ncloud\Dataset_AI\PIG"
+    data_test_path = os.path.join(data_path, "test")
+    transform_function = transforms.Compose(
+        [
+            transforms.Resize((456, 456)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ]
+    )
+
+    dataset = datasets.ImageFolder(data_test_path, transform_function)
+    dataloaders = {
+        "test": torch.utils.data.DataLoader(
+            dataset, batch_size=128, shuffle=True, num_workers=4
+        )
+    }
+
+    model_load, criterion, device = model_load_def(weights_path)
+    label_list, pred_list = model_test(
+        model_load, dataloaders["test"], device, criterion
+    )
+
+    for i in range(1, 10 + 1):
+        print(label_list, pred_list)
