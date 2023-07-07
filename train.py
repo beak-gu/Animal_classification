@@ -91,15 +91,17 @@ def train_model(
                     _, preds = torch.max(outputs, 1)
                     # 예측된 출력과 실제 레이블 간의 차이점
                     # 모델의 예측이 Ground Truth와 얼마나 잘 일치하는지
-                    print(outputs.shape, labels.shape)
                     loss = criterion(outputs, labels)
                     # 학습시만 backpropagation, backward + optimize only if in training phase
                     if phase == "train":
                         loss.backward()
                         optimizer.step()
                 # statistics
+                # running_loss => 현재까지의 loss를 누적하는 변수
                 running_loss += loss.item() * inputs.size(0)
+                # running_correct => 현재까지 올바르게 분류된 샘플의 수를 누적하는 변수
                 running_correct += torch.sum(preds == labels.data)
+                # => train, valid에서 손실이랑 정확도를 판별하기 위해 사용
                 num_cnt += len(labels)
                 pred_list += preds.data.cpu().numpy().tolist()
                 label_list += labels.data.cpu().numpy().tolist()
