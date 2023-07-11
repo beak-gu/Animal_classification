@@ -85,7 +85,7 @@ def model_test(model, image_tensor, device, criterion):
         outputs = model(inputs)
         probabilities = torch.softmax(outputs, dim=1)
         print(int(torch.max(probabilities[0]) * 100), "%확률")
-        if int(torch.max(probabilities[0]) * 100) < 67:
+        if int(torch.max(probabilities[0]) * 100) < 60:
             return [6], [6]
         _, preds = torch.max(outputs, 1)
         pred_list = preds.data.cpu().numpy().tolist()
