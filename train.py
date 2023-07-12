@@ -79,6 +79,11 @@ def train_model(
                 inputs, labels = batch
                 inputs = inputs.to(device)
                 labels = labels.to(device)
+                # 사진을 90도 돌리고 뒤집는 연산하여 3배 증폭
+                rot_input = torch.rot90(inputs, k=1, dims=[2, 3])
+                flip_input = torch.flip(inputs, k=1, dims=2)
+                inputs = torch.cat([inputs, rot_input, flip_input], dims=0)
+                labels = torch.cat([labels, labels, labels], dim=0)
                 # optimizer : 계산된 그라디언트를 기반으로 모델의 매개변수 업데이트 하는 최적화 '함수'
                 # 기계 학습의 목표 : 모델의 예측 값 간의 불일치를 측정하는 손실 함수를 최소화 하는 것
                 # 모델의 각 매개변수에 대해 기울기를 누적 => 기울기를 적용하여, 매개 변수를 업데이트 하기 전에 각 매개변수에 대해 기울기 0으로 설정

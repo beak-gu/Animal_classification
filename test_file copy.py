@@ -80,7 +80,7 @@ def model_test(model, dataloader, device, criterion):
 
 
 if __name__ == "__main__":
-    class_names = {0: "돼지가 아닙니다", 1: "멧돼지 입니다"}
+    class_names = {0: "멧돼지가 아닙니다", 1: "멧돼지 입니다"}
     weights_path = (
         r"C:\Users\ngw77\Desktop\Ncloud\Image_Training\output\model_19_99.12_99.12.pt"
     )
@@ -109,4 +109,4 @@ if __name__ == "__main__":
             i += 1
         class_name = class_names[pred]
         print("Prediction:", class_name)
-    print("전체 Acuraccy :", i / len(pred_list) * 100)
+    print("전체 Acuraccy :", int(i / len(pred_list) * 100))
