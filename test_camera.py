@@ -39,7 +39,7 @@ def capture_image():
 
 
 def model_load_def(weights_path):
-    model_name = "efficientnet-b0"  # b5
+    model_name = "efficientnet-b5"  # b5
     num_classes = 6  # 장싱, 비정상
     freeze_extractor = True  # FC layer만 학습하고 efficientNet extractor 부분은 freeze하여 학습시간 단축, 89860 vs 4097408
     use_multi_gpu = True
