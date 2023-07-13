@@ -26,10 +26,8 @@ from efficientnet_pytorch import EfficientNet
 
 
 def model_load_def(weights_path):
-    model_name = "efficientnet-b5"  # b5
+    model_name = "efficientnet-b0"  # b5
     num_classes = 6  # 장싱, 비정상
-    freeze_extractor = True  # FC layer만 학습하고 efficientNet extractor 부분은 freeze하여 학습시간 단축, 89860 vs 4097408
-    use_multi_gpu = True
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     model_load = EfficientNet.from_pretrained(model_name, num_classes=num_classes)
@@ -74,17 +72,16 @@ def model_test(model, dataloader, device, criterion):
         inputs = inputs.to(device)
         labels = labels.to(device)
         with torch.set_grad_enabled(False):
-            for inputs, labels in dataloader:
-                inputs = inputs.to(device)
-                labels = labels.to(device)
-                outputs = model(inputs)
-                probabilities = torch.softmax(outputs, dim=1)
-                # torch.Size([128, 6]) => batch_size,class => 해당클래스가 나올확률 => 합=1  torch.Size([6])
-                print(int(torch.max(probabilities[0]) * 100), "% 확률로 판단되었습니다.")
-                # if int(torch.max(probabilities[0]) * 100) < 67:
-                #     return [6], [6]
-                _, preds = torch.max(outputs, 1)
-                pred_list += preds.data.cpu().numpy().tolist()
+            inputs = inputs.to(device)
+            labels = labels.to(device)
+            outputs = model(inputs)
+            probabilities = torch.softmax(outputs, dim=1)
+            # torch.Size([128, 6]) => batch_size,class => 해당클래스가 나올확률 => 합=1  torch.Size([6])
+            print(int(torch.max(probabilities[0]) * 100), "% 확률로 판단되었습니다.")
+            # if int(torch.max(probabilities[0]) * 100) < 67:
+            #     return [6], [6]
+            _, preds = torch.max(outputs, 1)
+            pred_list += preds.data.cpu().numpy().tolist()
     return pred_list
 
 
@@ -114,7 +111,7 @@ if __name__ == "__main__":
     dataset = datasets.ImageFolder(data_test_path, transform_function)
     dataloaders = {
         "test": torch.utils.data.DataLoader(
-            dataset, batch_size=128, shuffle=True, num_workers=4
+            dataset, batch_size=128, shuffle=False, num_workers=4
         )
     }
 
