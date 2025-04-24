@@ -1,3 +1,9 @@
 # Image_Training
 
 Efficient Net 사용한 Image Training
+
+0주차 : 환경 구축하기 + data loader, 전처리 개발하기
+1주차 : Network Model 개발하기
+2주차 : 전체적인 시스템 연결하기
+3주차 : data argumentation 구축하기
+4주차 model 변경하면서 성능 올리기
